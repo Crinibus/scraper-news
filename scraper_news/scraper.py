@@ -31,12 +31,24 @@ class ScraperNews:
     def print_news(self):
         """Print the news from the source"""
         print(f"{self.source.upper()}:")
+
+        if len(self.news) == 0:
+            no_news_string = "> No breaking news" if self.is_breaking else "> No news"
+            print(no_news_string, "\n")
+            return
+
+        breaking_string = "BREAKING - " if self.is_breaking else ""
         for news in self.news:
-            breaking_string = "BREAKING - " if news.is_breaking else ""
             print(f"> {breaking_string}{news.title} - {news.url}")
+        print()
 
     def save_news(self):
         """Save the news to the json file"""
+        if len(self.news) == 0:
+            # no_news_to_save_string = "No breaking news to save" if self.is_breaking else "No news to save"
+            # print(f"{self.source.upper()} - {no_news_to_save_string}")
+            return
+
         news_data = Filemanager.get_news_data()
 
         if not news_data.get(self.source):
