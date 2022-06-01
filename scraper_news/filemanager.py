@@ -6,6 +6,8 @@ class Filemanager:
     # root path of this repository
     root_path = pathlib.Path(__file__).parent.parent.absolute()
     news_path = f"{root_path}/scraper_news/news.json"
+    logging_ini_path = f"{root_path}/scraper_news/logging.ini"
+    logfile_path = f"{root_path}/scraper_news/logfile.log"
 
     @staticmethod
     def read_json(filename: str) -> dict:

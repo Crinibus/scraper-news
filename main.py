@@ -1,5 +1,6 @@
 from typing import List
-from scraper_news import ScraperNews, request_url, argparse_setup
+import logging.config
+from scraper_news import ScraperNews, request_url, argparse_setup, Filemanager
 from bs4 import BeautifulSoup
 
 
@@ -19,4 +20,9 @@ def scrape_news(sources: List[str], is_breaking: bool):
 
 
 if __name__ == "__main__":
+    logging.config.fileConfig(
+        fname=Filemanager.logging_ini_path,
+        defaults={"logfilename": Filemanager.logfile_path},
+    )
+
     main()

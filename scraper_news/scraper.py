@@ -1,5 +1,6 @@
 from typing import List
 import requests
+import logging
 
 from .constants import REQUEST_HEADER, REQUEST_COOKIES
 from .sources import get_source_info
@@ -12,6 +13,7 @@ class ScraperNews:
         self.source: str = source.lower()
         self.is_breaking: bool = is_breaking
         self.news: List[News] = []
+        self.logger = logging.getLogger(__name__)
 
     def get_news(self) -> None:
         """Scrape news from the source"""
@@ -26,6 +28,10 @@ class ScraperNews:
         source_function = source_info["function"]
 
         response = request_url(link)
+
+        if response == None:
+            return
+
         self.news = source_function(response, self.is_breaking)
 
     def print_news(self):
@@ -66,10 +72,14 @@ class ScraperNews:
 
 
 def request_url(url: str) -> requests.models.Response:
-    response = requests.get(url, headers=REQUEST_HEADER, cookies=REQUEST_COOKIES, timeout=60)
-    # return BeautifulSoup(response.text, "html.parser")
-    return response
-
+    try:
+        response = requests.get(url, headers=REQUEST_HEADER, cookies=REQUEST_COOKIES, timeout=60)
+        # return BeautifulSoup(response.text, "html.parser")
+        return response
+    except requests.exceptions.RequestException:
+        logging.getLogger(__name__).exception(f"Module requests exception with url: {url}")
+        print("Requests error happen - check logfile")
+        return None
 
 def is_news_id_saved(news_id: str, saved_news: List[dict]) -> bool:
     for news in saved_news:
