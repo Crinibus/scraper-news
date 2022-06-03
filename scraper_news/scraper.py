@@ -63,7 +63,7 @@ class ScraperNews:
         source_news = news_data[self.source]
 
         for news in self.news:
-            if is_news_id_saved(news.id, source_news):
+            if is_news_id_saved(news.id, news.seq, source_news):
                 continue
 
             source_news.append(news.get_json())
@@ -81,8 +81,8 @@ def request_url(url: str) -> requests.models.Response:
         print("Requests error happen - check logfile")
         return None
 
-def is_news_id_saved(news_id: str, saved_news: List[dict]) -> bool:
+def is_news_id_saved(news_id: str, news_seq: int, saved_news: List[dict]) -> bool:
     for news in saved_news:
-        if news["id"] == news_id:
+        if news["id"] == news_id or news["seq"] == news_seq:
             return True
     return False

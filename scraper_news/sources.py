@@ -22,7 +22,8 @@ def tv2(response: requests.models.Response, is_breaking: bool) -> List[News]:
         title = news["title"]
         url = news["url"]
         id = news["id"]
-        news_info.append(News(title, url, id, is_breaking))
+        seq = news["seq"]
+        news_info.append(News(title, url, id, seq, is_breaking))
 
     return news_info
 
