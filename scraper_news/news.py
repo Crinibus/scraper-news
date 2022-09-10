@@ -2,7 +2,7 @@ from datetime import datetime
 
 
 class News:
-    def __init__(self, title: str, url: str, id: str, seq: int, is_breaking: bool) -> None:
+    def __init__(self, title: str, url: str, id: str = "", seq: int = "", is_breaking: bool = False) -> None:
         self.title: str = title
         self.url: str = url
         self.id: str = id

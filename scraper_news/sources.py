@@ -1,7 +1,7 @@
 from typing import List
 from bs4 import BeautifulSoup
+import re
 import requests
-import json
 
 from .news import News
 
@@ -10,8 +10,19 @@ def get_source_info(source: str) -> dict:
     return sources_info.get(source, None)
 
 
+def parse_dr_xml_text(xml_text):
+    return xml_text.strip().replace("<![CDATA[", "").replace("]]>", "")
+
+
 def dr(response: requests.models.Response, is_breaking: bool) -> str:
-    return response.text
+    news_items = BeautifulSoup(response.text, "lxml").findAll("item")
+    news_info = []
+    for news in news_items:
+        title = parse_dr_xml_text(news.title.text)
+        url = news.find(text=re.compile("^https*"))
+        pubdate = news.pubdate.text
+        news_info.append(News(title, url, seq=pubdate, is_breaking=is_breaking))
+    return news_info
 
 
 def tv2(response: requests.models.Response, is_breaking: bool) -> List[News]:
@@ -40,3 +51,4 @@ sources_info = {
         "function": dr,
     },
 }
+# [{"id":"0374cd07e49cc3e3e19616d00caed8facdf3ffa0","title":"Gazprom lukker gassen til \u00d8rsted","url":"http:\/\/nyheder.tv2.dk\/samfund\/2022-05-31-gazprom-lukker-gassen-til-oersted","seq":101123}]
