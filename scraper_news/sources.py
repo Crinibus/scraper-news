@@ -1,7 +1,8 @@
 from typing import List
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 import re
 import requests
+from lxml import etree
 
 from .news import News
 
@@ -10,18 +11,23 @@ def get_source_info(source: str) -> dict:
     return sources_info.get(source, None)
 
 
-def parse_dr_xml_text(xml_text):
-    return xml_text.strip().replace("<![CDATA[", "").replace("]]>", "")
+# def parse_dr_xml_text(xml_text):
+#     return xml_text.strip().replace("<![CDATA[", "").replace("]]>", "")
 
 
 def dr(response: requests.models.Response, is_breaking: bool) -> str:
-    news_items = BeautifulSoup(response.text, "lxml").findAll("item")
+    xml_parser = etree.XMLParser()
+    xml_parser.feed(response.text)
+    root = xml_parser.close()
+    news_items = root[0][8:]
+
     news_info = []
     for news in news_items:
-        id = news.guid.text
-        title = parse_dr_xml_text(news.title.text)
-        url = news.find(text=re.compile("^https*"))
-        pubdate = news.pubdate.text
+        id = news.find("guid").text
+        title = news.find("title").text
+        print("Title: ", title)
+        url = news.find("link").text
+        pubdate = news.find("pubDate").text
         news_info.append(News(title, url, id, seq=pubdate, is_breaking=is_breaking))
     return news_info
 
