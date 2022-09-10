@@ -18,10 +18,11 @@ def dr(response: requests.models.Response, is_breaking: bool) -> str:
     news_items = BeautifulSoup(response.text, "lxml").findAll("item")
     news_info = []
     for news in news_items:
+        id = news.guid.text
         title = parse_dr_xml_text(news.title.text)
         url = news.find(text=re.compile("^https*"))
         pubdate = news.pubdate.text
-        news_info.append(News(title, url, seq=pubdate, is_breaking=is_breaking))
+        news_info.append(News(title, url, id, seq=pubdate, is_breaking=is_breaking))
     return news_info
 
 
