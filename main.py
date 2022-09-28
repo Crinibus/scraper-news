@@ -1,8 +1,7 @@
 import threading
 from typing import List
 import logging.config
-from scraper_news import ScraperNews, request_url, argparse_setup, Filemanager
-from bs4 import BeautifulSoup
+from scraper_news import ScraperNews, argparse_setup, Filemanager
 
 
 def main():

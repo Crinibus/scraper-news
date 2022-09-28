@@ -29,7 +29,7 @@ class ScraperNews:
 
         response = request_url(link)
 
-        if response == None:
+        if response is None:
             return
 
         self.news = source_function(response, self.is_breaking)
@@ -80,6 +80,7 @@ def request_url(url: str) -> requests.models.Response:
         logging.getLogger(__name__).exception(f"Module requests exception with url: {url}")
         print("Requests error happen - check logfile")
         return None
+
 
 def is_news_saved(news_id: str, news_seq: int, news_title: str, saved_news: List[dict]) -> bool:
     for news in saved_news:
