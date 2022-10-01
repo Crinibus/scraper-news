@@ -28,7 +28,7 @@ def dr(response: requests.models.Response, is_breaking: bool) -> str:
         print("Title: ", title)
         url = news.find("link").text
         pubdate = news.find("pubDate").text
-        news_info.append(News(title, url, id, seq=pubdate, is_breaking=is_breaking))
+        news_info.append(News(title, url, "dr", id, seq=pubdate, is_breaking=is_breaking))
     return news_info
 
 
@@ -41,7 +41,7 @@ def tv2(response: requests.models.Response, is_breaking: bool) -> List[News]:
         url = news["url"]
         id = news["id"]
         seq = news["seq"]
-        news_info.append(News(title, url, id, seq, is_breaking))
+        news_info.append(News(title, url, "tv2", id, seq, is_breaking))
 
     return news_info
 

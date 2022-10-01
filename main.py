@@ -1,7 +1,7 @@
 from typing import List
 import logging.config
-from scraper_news import ScraperNews, request_url, argparse_setup, Filemanager
-from bs4 import BeautifulSoup
+from scraper_news import ScraperNews, argparse_setup, Filemanager
+import scraper_news
 
 
 def main():
@@ -9,6 +9,9 @@ def main():
 
     if args.scrape:
         scrape_news(args.sources, args.breaking)
+
+    if args.show:
+        scraper_news.show_news_in_time_frame(args.sources, args.hours, args.breaking)
 
 
 def scrape_news(sources: List[str], is_breaking: bool):

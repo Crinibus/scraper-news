@@ -37,4 +37,18 @@ def argparse_setup() -> ArgumentParser.parse_args:
         default=["tv2"],
     )
 
+    parser.add_argument(
+        "--show",
+        help="print out news",
+        dest="show",
+        action="store_true"
+    )
+
+    parser.add_argument(
+        "--hours",
+        help="amount of hours",
+        dest="hours",
+        type=int,
+    )
+
     return parser.parse_args()
