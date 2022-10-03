@@ -47,7 +47,7 @@ def argparse_setup() -> ArgumentParser.parse_args:
         type=str,
     )
 
-    return validate_arguments
+    return validate_arguments(parser)
 
 
 def validate_arguments(parser: ArgumentParser):
