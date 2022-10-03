@@ -32,8 +32,10 @@ def get_news_from_sources(sources: List[str]) -> Dict[str, List[News]]:
     return news_from_sources
 
 
-def get_news_in_time_frame_back(hours: int, news_list: List[News], must_be_breaking: bool) -> List[News]:
-    time_hours_back = datetime.now() - timedelta(hours=hours)
+def get_news_in_time_frame_back(hours_from: int, hours_to: int, news_list: List[News], must_be_breaking: bool) -> List[News]:
+    time_now = datetime.now()
+    time_hours_from = time_now - timedelta(hours=hours_from)
+    time_hours_to = time_now - timedelta(hours=hours_to)
 
     news_in_time_frame = []
 
@@ -42,7 +44,7 @@ def get_news_in_time_frame_back(hours: int, news_list: List[News], must_be_break
             continue
 
         news_time = datetime.strptime(news.time_saved, "%Y-%m-%d - %H:%M:%S")
-        if news_time < time_hours_back:
+        if not time_hours_to > news_time or not news_time > time_hours_from:
             continue
 
         news_in_time_frame.append(news)

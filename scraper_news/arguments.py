@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import re
 
 
 def argparse_setup() -> ArgumentParser.parse_args:
@@ -37,18 +38,24 @@ def argparse_setup() -> ArgumentParser.parse_args:
         default=["tv2"],
     )
 
-    parser.add_argument(
-        "--show",
-        help="print out news",
-        dest="show",
-        action="store_true"
-    )
+    parser.add_argument("--show", help="print out news", dest="show", action="store_true")
 
     parser.add_argument(
         "--hours",
-        help="amount of hours",
+        help="amount of hours back from now or a time interval back e.g. 4 to 10 hours back (--hours 4-10)",
         dest="hours",
-        type=int,
+        type=str,
     )
 
-    return parser.parse_args()
+    return validate_arguments
+
+
+def validate_arguments(parser: ArgumentParser):
+    args = parser.parse_args()
+
+    if args.hours:
+        valid_hours_re = re.compile(r"^([\d]+\-[\d]+)$|^[\d]+$")
+        if not valid_hours_re.match(args.hours):
+            parser.error("Not valid --hours argument")
+
+    return args
