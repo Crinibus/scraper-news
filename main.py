@@ -7,6 +7,9 @@ import scraper_news
 def main():
     args = argparse_setup()
 
+    if args.count:
+        count_news()
+
     if args.scrape:
         scrape_news(args.sources, args.breaking)
 
@@ -20,6 +23,15 @@ def scrape_news(sources: List[str], is_breaking: bool):
         s.get_news()
         s.print_news()
         s.save_news()
+
+
+def count_news() -> None:
+    news = Filemanager.get_news_data()
+
+    for source_name, news_list in news.items():
+        print(f"\n{source_name.upper()}")
+        print(f"Number of news: {len(news_list)}")
+    print()
 
 
 if __name__ == "__main__":

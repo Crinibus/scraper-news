@@ -47,6 +47,13 @@ def argparse_setup() -> ArgumentParser.parse_args:
         type=str,
     )
 
+    parser.add_argument(
+        "--count",
+        help="count the number of news in news.json",
+        dest="count",
+        action="store_true",
+    )
+
     return validate_arguments(parser)
 
 
